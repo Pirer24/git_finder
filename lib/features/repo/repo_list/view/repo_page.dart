@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:git_finder/features/core/consts/app_config.dart';
-import 'package:git_finder/features/repo/repo_list/bloc/repo_bloc.dart';
+import 'package:git_finder/features/repo/repo_list/bloc/repo_list_bloc.dart';
 import 'package:git_finder/features/repo/repo_list/view/widgets/repo_list_widget.dart';
 import 'package:git_finder/features/repo/repo_list/view/widgets/repo_searchbar_widget.dart';
 
@@ -21,29 +21,29 @@ class _RepoPageState extends State<RepoPage> {
       appBar: AppBar(title: const Text(AppConfig.appName)),
       body: SafeArea(
         minimum: const EdgeInsets.symmetric(horizontal: 16.0),
-        child: BlocBuilder<RepoBloc, RepoState>(
-          builder: (BuildContext context, RepoState state) {
+        child: BlocBuilder<RepoListBloc, RepoListState>(
+          builder: (BuildContext context, RepoListState state) {
             return Column(
               children: [
                 RepoSearchbarWidget(
                   controller: _controller,
                   onSubmitted: (query) => _onSubmitted(context, query),
-                  enabled: state is RepoLoaded,
+                  enabled: state is RepoListLoaded,
                 ),
-                if (state is RepoLoaded)
+                if (state is RepoListLoaded)
                   Expanded(
                     child: RepoListWidget(
                       repos: state.repos,
                       onRefresh: () => _onRefresh(context),
                     ),
                   ),
-                if (state is RepoLoading)
+                if (state is RepoListLoading)
                   Expanded(
                     child: const Center(
                       child: CircularProgressIndicator(),
                     ),
                   ),
-                if (state is RepoError)
+                if (state is RepoListError)
                   Expanded(
                     child: Center(
                       child: Text(state.message),
@@ -59,9 +59,9 @@ class _RepoPageState extends State<RepoPage> {
 
   void _onSubmitted(BuildContext context, String query) {
     if (query.isNotEmpty) {
-      RepoBloc.of(context).add(RepoSearch(query));
+      RepoListBloc.of(context).add(RepoListSearch(query));
     } else {
-      RepoBloc.of(context).add(RepoInit());
+      RepoListBloc.of(context).add(RepoListInit());
     }
   }
 

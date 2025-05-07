@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:git_finder/features/repo/repo_list/bloc/repo_bloc.dart';
+import 'package:git_finder/features/repo/repo_list/bloc/repo_list_bloc.dart';
 import 'package:git_finder/features/repo/repo_list/data/repositories/repo_repository.dart';
 import 'package:git_finder/features/repo/repo_list/view/repo_page.dart';
 
@@ -10,9 +10,9 @@ class RepoRoute extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => RepoBloc(
+      create: (context) => RepoListBloc(
         repoRepository: RepoRepositoryImpl(),
-      )..add(RepoInit()),
+      )..add(RepoListInit()),
       child: RepoPage(),
     );
   }
